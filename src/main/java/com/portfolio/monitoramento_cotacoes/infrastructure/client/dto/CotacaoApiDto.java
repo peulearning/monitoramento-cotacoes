@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class CotacaoApiDto {
+public class CotacaoApiDTO {
 
   private String base;
   private String target;
