@@ -20,4 +20,6 @@ public interface CotacaoRepositoryPort {
 
   //Método para buscar no histórico de cotações entre duas moedas em uma data específica
   List<Cotacao> buscarHistorico(String moedaOrigem, String moedaDestino, LocalDateTime dataRegistro);
+
+  List<Cotacao> buscarHistorico(String moedaOrigem, String moedaDestino);
 }
