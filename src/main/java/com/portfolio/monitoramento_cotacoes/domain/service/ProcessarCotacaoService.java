@@ -14,24 +14,24 @@ import com.portfolio.monitoramento_cotacoes.domain.port.out.CotacaoRepositoryPor
 @Service
 public class ProcessarCotacaoService implements ProcessarCotacaoUseCase {
 
-  private final ClienteApiCotacaoPort clienteApiCotacao;
-  private final CotacaoRepositoryPort cotacaoRepository;
+    private final ClienteApiCotacaoPort clienteApiCotacao;
+    private final CotacaoRepositoryPort cotacaoRepository;
 
-  public ProcessarCotacaoService(ClienteApiCotacaoPort clienteApiCotacao,
-      CotacaoRepositoryPort cotacaoRepository) {
-    this.clienteApiCotacao = clienteApiCotacao;
-    this.cotacaoRepository = cotacaoRepository;
-  }
+    public ProcessarCotacaoService(ClienteApiCotacaoPort clienteApiCotacao,
+            CotacaoRepositoryPort cotacaoRepository) {
+        this.clienteApiCotacao = clienteApiCotacao;
+        this.cotacaoRepository = cotacaoRepository;
+    }
 
-  @Override
-  public void processarCotacao(String moedaOrigem, String moedaDestino) {
-    // 1. Regra de Negócio: Buscar a cotação na fonte externa
+    @Override
+    public void processarCotacao(String moedaOrigem, String moedaDestino) {
+        // 1. Regra de Negócio: Buscar a cotação na fonte externa
         Optional<Cotacao> cotacaoOpt = clienteApiCotacao.buscarCotacaoExterna(moedaOrigem, moedaDestino);
 
         if (cotacaoOpt.isPresent()) {
             Cotacao novaCotacao = cotacaoOpt.get();
 
-            // Definir o timestamp exato do registro (poderia ser feito no Adapter, mas é um bom lugar para validar)
+            // Definir o timestamp
             novaCotacao.setDataRegistro(LocalDateTime.now());
 
             // 2. Regra de Negócio: Persistir o dado no repositório
@@ -39,11 +39,9 @@ public class ProcessarCotacaoService implements ProcessarCotacaoUseCase {
             System.out.println("Cotação processada e salva com sucesso: " + novaCotacao.getValor());
 
         } else {
-            // 3. Regra de Negócio: Lidar com falha na integração (ex: log, notificação)
+            // 3. Regra de Negócio: Lidar com falha na integração
             System.err.println("Falha ao buscar cotação externa para " + moedaOrigem + "/" + moedaDestino);
-            // Poderíamos lançar uma exceção de domínio aqui para ser tratada na camada de Application.
         }
-           throw new UnsupportedOperationException("Unimplemented method 'processarCotacao'");
-  }
-
+        // AGORA NÃO HÁ MAIS NENHUM THROW AQUI, O MÉTODO TERMINA NORMALMENTE.
+    }
 }
